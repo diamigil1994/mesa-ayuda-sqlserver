@@ -68,7 +68,63 @@ BEGIN
         WHERE motivo IS NOT NULL;
         SET @rechazadas = @@ROWCOUNT;
 
-        -- (Parte 2, mañana: dimensiones y tabla de hechos)
+
+        -- 4. Dimensiones: agregar usuarios y técnicos que aún no existen
+        INSERT INTO dwh.dim_usuario (nombre)
+        SELECT DISTINCT LTRIM(RTRIM(b.usuario))
+        FROM #base b
+        JOIN #evaluada e ON e.fila = b.fila
+        WHERE e.motivo IS NULL
+        AND NOT EXISTS (SELECT 1 FROM dwh.dim_usuario u
+                        WHERE u.nombre = LTRIM(RTRIM(b.usuario)));
+
+        INSERT INTO dwh.dim_tecnico (nombre)
+        SELECT DISTINCT LTRIM(RTRIM(b.tecnico))
+        FROM #base b
+        JOIN #evaluada e ON e.fila = b.fila
+        WHERE e.motivo IS NULL
+        AND NOT EXISTS (SELECT 1 FROM dwh.dim_tecnico t
+                        WHERE t.nombre = LTRIM(RTRIM(b.tecnico)));
+
+
+       -- 5. Hechos: cargar los tickets buenos que aún no están en fact_tickets
+        INSERT INTO dwh.fact_tickets
+            (ticket_id, fecha_apertura_id, fecha_cierre_id, usuario_id, tecnico_id,
+            categoria_id, prioridad_id, estado, horas_resolucion, cumplio_sla, reabierto)
+        SELECT
+            TRY_CONVERT(INT, b.ticket_id),
+            CONVERT(INT, CONVERT(CHAR(8), TRY_CONVERT(DATETIME2, b.fecha_apertura), 112)),
+            CASE WHEN NULLIF(LTRIM(RTRIM(b.fecha_cierre)), '') IS NULL THEN NULL
+                ELSE CONVERT(INT, CONVERT(CHAR(8), TRY_CONVERT(DATETIME2, b.fecha_cierre), 112))
+            END,
+            u.usuario_id,
+            t.tecnico_id,
+            c.categoria_id,
+            p.prioridad_id,
+            b.estado,
+            CASE WHEN NULLIF(LTRIM(RTRIM(b.fecha_cierre)), '') IS NULL THEN NULL
+                ELSE CAST(DATEDIFF(MINUTE, TRY_CONVERT(DATETIME2, b.fecha_apertura),
+                                            TRY_CONVERT(DATETIME2, b.fecha_cierre)) / 60.0
+                        AS DECIMAL(10,2))
+            END,
+            CASE WHEN NULLIF(LTRIM(RTRIM(b.fecha_cierre)), '') IS NULL THEN NULL
+                WHEN DATEDIFF(MINUTE, TRY_CONVERT(DATETIME2, b.fecha_apertura),
+                                    TRY_CONVERT(DATETIME2, b.fecha_cierre)) / 60.0 <= p.sla_horas
+                    THEN 1
+                ELSE 0
+            END,
+            CAST(REPLACE(b.reabierto, CHAR(13), '') AS BIT)
+        FROM #base b
+        JOIN #evaluada e        ON e.fila = b.fila
+        JOIN dwh.dim_usuario u  ON u.nombre = LTRIM(RTRIM(b.usuario))
+        JOIN dwh.dim_tecnico t  ON t.nombre = LTRIM(RTRIM(b.tecnico))
+        JOIN dwh.dim_categoria c ON c.nombre = LTRIM(RTRIM(b.categoria))
+        JOIN dwh.dim_prioridad p ON p.nombre = LTRIM(RTRIM(b.prioridad))
+        WHERE e.motivo IS NULL
+        AND NOT EXISTS (SELECT 1 FROM dwh.fact_tickets f
+                        WHERE f.ticket_id = TRY_CONVERT(INT, b.ticket_id));
+        SET @cargadas = @@ROWCOUNT;
+
 
         COMMIT;
 
