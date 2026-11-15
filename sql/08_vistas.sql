@@ -1,7 +1,7 @@
 USE MesaAyuda;
 GO
 
--- Cumplimiento de SLA por categoría (solo tickets cerrados)
+-- Cumplimiento de SLA por categoría (solo tickets cerrados) 
 CREATE OR ALTER VIEW dwh.vw_sla_por_categoria AS
 SELECT
     c.nombre AS categoria,
@@ -29,4 +29,19 @@ JOIN dwh.dim_tecnico t ON t.tecnico_id = f.tecnico_id
 GROUP BY t.nombre;
 GO
 
+
+
+-- Tickets por categoría y prioridad (PIVOT: las prioridades pasan a ser columnas)
+CREATE OR ALTER VIEW dwh.vw_pivot_prioridad_categoria AS
+SELECT categoria, [Alta], [Media], [Baja]
+FROM (
+    SELECT c.nombre AS categoria, p.nombre AS prioridad
+    FROM dwh.fact_tickets f
+    JOIN dwh.dim_categoria c ON c.categoria_id = f.categoria_id
+    JOIN dwh.dim_prioridad p ON p.prioridad_id = f.prioridad_id
+) AS origen
+PIVOT (
+    COUNT(prioridad) FOR prioridad IN ([Alta], [Media], [Baja])
+) AS pvt;
+GO
 
