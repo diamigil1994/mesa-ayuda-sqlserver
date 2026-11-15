@@ -1,0 +1,9 @@
+IF DB_ID('MesaAyuda') IS NULL
+    CREATE DATABASE MesaAyuda;
+GO
+USE MesaAyuda;
+GO
+IF SCHEMA_ID('stg') IS NULL EXEC('CREATE SCHEMA stg');
+GO
+IF SCHEMA_ID('dwh') IS NULL EXEC('CREATE SCHEMA dwh');
+GO
