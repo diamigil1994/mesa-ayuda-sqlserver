@@ -12,7 +12,7 @@ Practicar y demostrar el flujo completo de un proyecto de datos: datos crudos, l
 - T-SQL: procedimientos almacenados, vistas, PIVOT, índices
 - SQL Server Agent (job de carga)
 - Python (generación de datos sintéticos)
-- Metabase (tablero, opcional)
+- Metabase 
 - Git y GitHub
 
 ## Estado del proyecto
@@ -20,7 +20,7 @@ Practicar y demostrar el flujo completo de un proyecto de datos: datos crudos, l
 - [x] Entorno: SQL Server en Docker y conexión desde VS Code
 - [x] Generación de datos sintéticos con Python (con errores de calidad intencionales)
 - [x] Carga a staging con BULK INSERT
-- [ ] Modelo estrella (hechos y dimensiones)
+- [x] Modelo estrella (hechos y dimensiones)
 - [ ] Procedimiento almacenado de carga (idempotente, con rechazados y bitácora)
 - [ ] Vistas de reporte
 - [ ] Reporte con PIVOT
@@ -44,7 +44,7 @@ docker run -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=<TU_CLAVE>' -e 'MSSQL_PID=De
 docker cp data\tickets.csv sqlserver:/var/opt/mssql/data/tickets.csv
 ```
 
-5. Conéctate con la extensión SQL Server (mssql) de VS Code (servidor `localhost`, puerto 1433, usuario `sa`) y ejecuta en orden los scripts de `sql/`: `01`, `02` y `03`. El `04` sirve para verificar la carga.
+5. Conéctate con la extensión SQL Server (mssql) de VS Code (servidor `localhost`, puerto 1433, usuario `sa`) y ejecuta en orden los scripts de `sql/`: `01`, `02`, `03` y `05`. El `04` sirve para verificar la carga.
 
 Si Docker se reinicia y el contenedor desaparece, repite los pasos 2 a 5.
 
