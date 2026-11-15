@@ -18,6 +18,10 @@ CREATE TABLE dwh.dim_categoria (
 );
 GO
 
+INSERT INTO dwh.dim_categoria (nombre)
+VALUES ('Hardware'), ('Software'), ('Red'), ('Accesos'), ('Impresoras');
+GO
+
 CREATE TABLE dwh.dim_usuario (
     usuario_id INT IDENTITY(1,1) PRIMARY KEY,
     nombre     NVARCHAR(100) NOT NULL UNIQUE
@@ -109,6 +113,11 @@ GO
 SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dwh';
 SELECT COUNT(*) AS dias FROM dwh.dim_fecha;
 SELECT * FROM dwh.dim_prioridad;
+
+
+SELECT * FROM dwh.dim_categoria;
+
+SELECT COUNT(*) FROM stg.tickets;
 
 
 
