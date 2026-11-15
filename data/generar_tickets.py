@@ -43,19 +43,23 @@ def generar_ticket(ticket_id): # funcion para generar un ticket con datos aleato
 def ensuciar(filas): # funcion para ensuciar los datos generados y simular errores humanos y problemas de calidad de datos
     cantidad = int(len(filas) * 0.03) # se calcula el 3% de la cantidad de filas para ensuciar
     for fila in random.sample(filas, cantidad): # se selecciona una muestra aleatoria de filas para ensuciar
-        tipo = random.choice(["fecha_invalida", "cierre_antes", "categoria_sucia", "vacio"]) # se selecciona un tipo de ensuciamiento al azar
+        tipo = random.choice(["fecha_invalida", "cierre_antes", "categoria_sucia", "vacio", "duplicados"]) # se selecciona un tipo de ensuciamiento al azar
         if tipo == "fecha_invalida": # se asigna una fecha de apertura invalida a la fila seleccionada 
             fila["fecha_apertura"] = "31/02/2026" # se muestra un ejemplo de fecha invalida para ensuciar los datos
-        # TODO: cierre_antes 
-        # TODO: categoria_sucia
-        # TODO: vacio
-    # TODO: duplicados
+        elif tipo == "cierre_antes": # se asigna una fecha de cierre antes de la fecha de apertura a la fila seleccionada
+            fila["fecha_cierre"] = "2025-10-31 12:00:00" # se muestra un ejemplo de fecha de cierre antes de la fecha de apertura para ensuciar datos
+        elif tipo == "categoria_sucia": # se asigna una categoria sucia a la fila seleccionada
+            fila["categoria"] = "Hardware/software" # se muestra un ejemplo de categoria sucia para ensuciar datos
+        elif tipo == "vacio": # se asigna un valor vacio a la fila seleccionada
+            fila["usuario"] = "" # se muestra un ejemplo de valor vacio
+        elif tipo == "duplicados": # se asigna un ticket_id duplicado a la fila seleccionada 
+            fila["ticket_id"] = random.choice(filas)["ticket_id"]
     return filas
 
 
 def main(): # funcion principal para generar los tickets y guardarlos en un archivo CSV
     filas = [generar_ticket(i) for i in range(1, N_TICKETS + 1)] # generar tickets y guardarlos en una lista de diccionarios
-    # TODO (tanda 2): filas = ensuciar(filas) # todo: ensuciar los datos para simular errores humanos y problemas de calidad de datos 
+    filas = ensuciar(filas) # ensuciar los datos generados para simular errores humanos y problemas de calidad de datos 
 
     ruta = Path(__file__).parent / "tickets.csv" # ruta del archivo CSV donde se guardan los tickets generados
     with open(ruta, "w", newline="", encoding="utf-8") as f:
