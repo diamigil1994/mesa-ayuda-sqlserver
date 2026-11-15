@@ -12,13 +12,13 @@ Practicar y demostrar el flujo completo de un proyecto de datos: datos crudos, l
 - T-SQL: procedimientos almacenados, vistas, PIVOT, índices
 - SQL Server Agent (job de carga)
 - Python (generación de datos sintéticos)
-- Metabase (tablero, opcional)
+- Metabase 
 - Git y GitHub
 
 ## Estado del proyecto
 
 - [x] Entorno: SQL Server en Docker y conexión desde VS Code
-- [ ] Generación de datos sintéticos con Python
+- [x] Generación de datos sintéticos con Python
 - [ ] Carga a staging con BULK INSERT
 - [ ] Modelo estrella (hechos y dimensiones)
 - [ ] Procedimiento almacenado de carga (idempotente, con rechazados y bitácora)
