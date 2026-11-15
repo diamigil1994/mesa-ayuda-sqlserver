@@ -32,7 +32,7 @@ Practicar y demostrar el flujo completo de un proyecto de datos: datos crudos, l
 
 1. Clona el repositorio.
 2. Copia `.env.example` como `.env` y escribe tu propia clave.
-3. Levanta SQL Server con Docker (instrucciones completas próximamente).
+3. Levanta SQL Server con Docker
 4. Ejecuta los scripts de la carpeta `sql/` en orden numérico.
 
 ## Estructura del repositorio
