@@ -15,6 +15,7 @@ Proyecto de portafolio: un proceso ETL completo en **T-SQL** que carga tickets d
 - Índices con mejora medida
 - Automatización con SQL Server Agent
 - Docker, Python y Git
+- Dashboard en Metabase sobre el data warehouse
 
 ## Flujo de datos
 
@@ -84,6 +85,12 @@ Resultado de una carga: **10.000 leídas, 9.700 cargadas, 300 rechazadas.** Cada
 ## Rendimiento
 
 Un índice no agrupado sobre `(fecha_apertura_id, categoria_id)` en `fact_tickets` redujo las lecturas lógicas de **83 a 5 (-94%)** en una consulta filtrada por rango de fechas y categoría, medido con `SET STATISTICS IO`. Con más filas, el beneficio crece.
+
+## Dashboard
+
+Dashboard en Metabase conectado al data warehouse: cumplimiento de SLA por categoría, carga por técnico, tickets por prioridad y por mes, y calidad de datos (rechazos por motivo).
+
+![Dashboard en Metabase](docs/dashboard_metabase.png)
 
 ## Cómo ejecutarlo
 
