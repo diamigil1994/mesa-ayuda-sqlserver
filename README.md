@@ -15,7 +15,7 @@ Proyecto de portafolio: un proceso ETL completo en **T-SQL** que carga tickets d
 - Índices con mejora medida
 - Automatización con SQL Server Agent
 - Docker, Python y Git
-- Dashboard en Metabase sobre el data warehouse
+- Dashboards interactivos en Metabase y Power BI conectados directamente al Data Warehouse.
 
 ## Flujo de datos
 
@@ -88,9 +88,18 @@ Un índice no agrupado sobre `(fecha_apertura_id, categoria_id)` en `fact_ticket
 
 ## Dashboard
 
-Dashboard en Metabase conectado al data warehouse: cumplimiento de SLA por categoría, carga por técnico, tickets por prioridad y por mes, y calidad de datos (rechazos por motivo).
+Dashboard en Metabase y Power BI conectado al data warehouse: cumplimiento de SLA por categoría, carga por técnico, tickets por prioridad y por mes, y calidad de datos (rechazos por motivo).
 
+### Metabase
 ![Dashboard en Metabase](docs/dashboard_metabase.png)
+
+### Power BI (Modelo Estrella)
+![Dashboard en Power BI - Modelo Estrella](docs/Dashboard_PowerBi_modeloEstrella.png)
+
+### Power BI (General)
+![Dashboard en Power BI](docs/Dashboard_PowerBi.png)
+
+
 
 ## Cómo ejecutarlo
 
